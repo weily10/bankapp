@@ -21,7 +21,6 @@ function authForm({ type }: { type: string }) {
                             ? 'Sign In'
                             : 'Sign Up'
                         }
-
                     </h1>
                 </div>
             </header>
