@@ -1,8 +1,36 @@
+"use client"
+
+
 import React from "react";
 import Link from 'next/link'
 import Image from 'next/image'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import CustomInput from "./CustomInput";
+import { Button } from "@/components/ui/button"
+import {
+    Form,
+} from "@/components/ui/form"
+
+const formSchema = z.object({
+    email: z.email({ message: 'invalid email' }),
+    password: z.string({ message: 'invalid password' }).min(8)
+})
 
 function authForm({ type }: { type: string }) {
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            email: "",
+            password:''
+        },
+    })
+
+    function onSubmit(values: z.infer<typeof formSchema>) {
+
+        console.log(values)
+    }
     return (
         <section className="auth-form">
             <header className='flex flex-col gap-5 md:gap-8'>
@@ -24,6 +52,25 @@ function authForm({ type }: { type: string }) {
                     </h1>
                 </div>
             </header>
+            <div>
+                <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <CustomInput
+                            control={form.control}
+                            name="email"
+                            label="Email"
+                            placeholder="input your email"
+                        />
+                        <CustomInput
+                            control={form.control}
+                            name="password"
+                            label="Password"
+                            placeholder="input your password"
+                        />
+                        <Button type="submit">Submit</Button>
+                    </form>
+                </Form>
+            </div>
         </section>)
 }
 
