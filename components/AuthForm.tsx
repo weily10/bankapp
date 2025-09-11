@@ -1,7 +1,7 @@
 "use client"
 
 
-import React from "react";
+import React, { useState } from "react";
 import Link from 'next/link'
 import Image from 'next/image'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -19,17 +19,18 @@ const formSchema = z.object({
 })
 
 function authForm({ type }: { type: string }) {
+    const [isLoading, setIsLoading] = useState(false)
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
-            password:''
+            password: ''
         },
     })
 
     function onSubmit(values: z.infer<typeof formSchema>) {
-
-        console.log(values)
+        setIsLoading(true)
     }
     return (
         <section className="auth-form">
