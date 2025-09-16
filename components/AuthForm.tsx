@@ -6,17 +6,21 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation";
 import { z } from "zod"
 import CustomInput from "./CustomInput";
 import { Button } from "@/components/ui/button"
 import {
     Form,
 } from "@/components/ui/form"
-import { Loader2 } from 'lucide-react';
+import { Loader2, Route } from 'lucide-react';
 import { authFormSchema } from "@/lib/utils";
+import { signIn, signUp } from '@/lib/actions/user.actions'
 
 
 function authForm({ type }: { type: string }) {
+    const router = useRouter()
+    const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
     const formSchema = authFormSchema(type)
     const form = useForm<z.infer<typeof formSchema>>({
@@ -24,13 +28,34 @@ function authForm({ type }: { type: string }) {
         defaultValues: {
             email: "",
             password: ''
-            
+
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(data: z.infer<typeof formSchema>) {
         setIsLoading(true)
-        setIsLoading(false)
+
+        try {
+            if (type === 'sign-up') {
+                await signUp(data).then(res => {
+                      setUser(res.data)
+                })
+            }
+
+            if (type === 'sign-in') {
+                await signIn(data).then(res => {
+                    console.log(res);
+                })
+                router.push('/')
+            }
+
+        } catch (error) {
+
+        } finally {
+            setIsLoading(false)
+        }
+
+
     }
     return (
         <section className="auth-form">
