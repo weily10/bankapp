@@ -16,14 +16,14 @@ import {
 import { Loader2, Route } from 'lucide-react';
 import { authFormSchema } from "@/lib/utils";
 import { signIn, signUp } from '@/lib/actions/user.actions'
+ 
 
-
-function authForm({ type }: { type: string }) {
+async function authForm({ type }: { type: string }) {
     const router = useRouter()
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
     const formSchema = authFormSchema(type)
-    const form = useForm<z.infer<typeof formSchema>>({
+     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
