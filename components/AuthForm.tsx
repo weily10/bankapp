@@ -17,8 +17,7 @@ import { Loader2, Route } from 'lucide-react';
 import { authFormSchema } from "@/lib/utils";
 import { signIn, signUp } from '@/lib/actions/user.actions'
  
-
-async function authForm({ type }: { type: string }) {
+ function authForm({ type }: { type: string }) {
     const router = useRouter()
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false)
@@ -43,10 +42,14 @@ async function authForm({ type }: { type: string }) {
             }
 
             if (type === 'sign-in') {
-                await signIn(data).then(res => {
+                await signIn({
+                    email: data.email,
+                    password:data.password
+                }).then(res => {
                     console.log(res);
+                    router.push('/')
                 })
-                router.push('/')
+               
             }
 
         } catch (error) {
