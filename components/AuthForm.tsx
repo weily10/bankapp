@@ -37,6 +37,7 @@ import { signIn, signUp } from '@/lib/actions/user.actions'
         try {
             if (type === 'sign-up') {
                 await signUp(data).then(res => {
+                    
                       setUser(res.data)
                 })
             }
